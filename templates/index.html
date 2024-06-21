@@ -1,0 +1,62 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Index
+{% endblock %}
+
+{% block main %}
+
+<h2> Holdings: </h2>
+<br>
+
+<table>
+    <thread>
+        <tbody>
+                {% set ns = namespace(total=0) %}
+                {% if holdings %}
+                    <tr>
+                        <td> Stock symbol </td>
+                        <td> Current Price ($US) </td>
+                        <td>  Quantity </td>
+                        <td> Total ($US) </td>
+                    </tr>
+
+                    {% for stock in holdings %}
+                    <tr>
+                        <td> {{ stock['stock'] }} </td>
+                        <td> {{ (lookup(stock['stock'])['price']) | usd}} </td>
+                        <td> {{ stock['quantity'] }} </td>
+                        <td> {{ (stock['quantity'] * (lookup(stock['stock'])['price'])) | usd}} </td>
+                        {% set ns.total =  ns.total + (stock['quantity'] * (lookup(stock['stock'])['price']))  %}
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td> No current stock holdings </td>
+                    </tr>
+                {% endif %}
+                    <tr>
+                        <td> </td>
+                        <td> </td>
+                        <td style="text-align:right"> Total current stock value ($US) : </td>
+                        <td> {{ ns.total | usd }} </td>
+                    </tr>
+                    <tr>
+                        <td> </td>
+                        <td> </td>
+                        <td style="text-align:right"> Cash balance ($US) : </td>
+                        <td> {{ cash | usd }} </td>
+                    </tr>
+                    <tr>
+                        <td> </td>
+                        <td> </td>
+                        <td style="text-align:right"> Total cash + stocks ($US) : </td>
+                        <td> {{ (cash+ns.total) | usd }} </td>
+                    </tr>
+        </tbody>
+    </thread>
+</table>
+{% endblock %}

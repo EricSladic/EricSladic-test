@@ -1,0 +1,71 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Buy
+{% endblock %}
+
+{% block main %}
+
+<form action="/buy" method="post">
+
+    <div class="mb-3" style ="display: flex;  ">
+        <h2> Buy stock :</h2>
+        <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="symbol" placeholder="stock symbol" type="text">
+        <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="quantity" placeholder="# of shares to buy" type="number" min="1">
+    <button class="btn btn-primary" style="justify-content: ;"type="submit"
+    onclick="return confirm('Are you sure you want to BUY this stock?')">Buy</button>
+    </div>
+
+</form>
+
+<table>
+    <thread>
+        <tbody>
+                {% set ns = namespace(total=0) %}
+                {% if holdings %}
+                    <tr>
+                        <td> Stock symbol </td>
+                        <td> Current Price ($US) </td>
+                        <td>  Quantity </td>
+                        <td> Total ($US) </td>
+                    </tr>
+
+                    {% for stock in holdings %}
+                    <tr>
+                        <td> {{ stock['stock'] }} </td>
+                        <td> {{ (lookup(stock['stock'])['price']) | usd}} </td>
+                        <td> {{ stock['quantity'] }} </td>
+                        <td> {{ (stock['quantity'] * (lookup(stock['stock'])['price'])) | usd}} </td>
+                        {% set ns.total =  ns.total + (stock['quantity'] * (lookup(stock['stock'])['price']))  %}
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td> No current stock holdings </td>
+                    </tr>
+                {% endif %}
+                    <tr>
+                        <td> </td>
+                        <td> </td>
+                        <td style="text-align:right"> Total current stock value ($US) : </td>
+                        <td> {{ ns.total | usd }} </td>
+                    </tr>
+                    <tr>
+                        <td> </td>
+                        <td> </td>
+                        <td style="text-align:right"> Cash balance ($US) : </td>
+                        <td> {{ cash | usd }} </td>
+                    </tr>
+                    <tr>
+                        <td> </td>
+                        <td> </td>
+                        <td style="text-align:right"> Total cash + stocks ($US) : </td>
+                        <td> {{ (cash+ns.total) | usd }} </td>
+                    </tr>
+        </tbody>
+    </thread>
+</table>
+{% endblock %}

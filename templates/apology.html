@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Apology
+{% endblock %}
+
+{% block main %}
+    <form>
+        <input class="btn btn-primary" type="button" value="Return" onclick="history.back(-1)" />
+    </form>
+    <!-- https://memegen.link/ -->
+    <!-- https://knowyourmeme.com/memes/grumpy-cat -->
+    <img alt="{{ top }}" class="border img-fluid" src="https://api.memegen.link/images/custom/{{ top | urlencode }}/{{ bottom | urlencode }}.jpg?background=https://www.furiouscinema.com/wp-content/uploads/2012/08/Alec-Baldwin-Glengarry-Glen-Ross.jpg&width=400" title="{{ top }}">
+
+{% endblock %}
+
+
+

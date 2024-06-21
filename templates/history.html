@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    History
+{% endblock %}
+
+{% block main %}
+<h2> Transaction history :</h2>
+<br>
+<h3> {{ quotemessage }} </h3>
+<br>
+
+<table>
+    <thread>
+        <tbody>
+
+            <tr>
+                <td> Stock symbol </td>
+                <td> Price ($US) </td>
+                <td>  Quantity </td>
+                <td> Total ($US) </td>
+                <td> yyyy-mm-dd hh:mm:ss </td>
+            </tr>
+
+            {% if transactions %}
+                {% for transaction in transactions %}
+                    <tr>
+                        <td>{{ transaction['stock'] }}</td>
+                        <td>{{ transaction['price'] | usd }}</td>
+                        <td>{{ transaction['quantity'] }}</td>
+                        <td>{{ ( transaction['price'] * transaction['quantity'] ) | usd }}</td>
+                        <td>{{ transaction['date'] }}</td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td> No transaction history </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </thread>
+</table>
+
+<br>
+<br>
+<form action="/quote" method="post">
+        <input class="btn btn-primary" type="button" value="Return" onclick="history.back(-1)" />
+</form>
+{% endblock %}
